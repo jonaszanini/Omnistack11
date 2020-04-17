@@ -1,19 +1,19 @@
-const express = require('express');
 /* import { Router } from 'express'; */
+const express = require('express');
+const CourseController = require('./Controllers/CourseController')
+const UserController = require('./Controllers/UserController')
+const EnrollmentController = require('./Controllers/EnrollmentController')
 
 const routes = express.Router();
 
-routes.post('/users', (request, response) => {
+routes.get('/courses', CourseController.index)
+routes.post('/courses', CourseController.create);
 
-    const params = request.body;
+routes.post('/users', UserController.create)
+routes.get('/users', UserController.index)
 
-    console.log(params);    
-
-    return response.json({
-        Evento: 'Semana Omnistack',
-        Aluno: 'Jonas' 
-    })
-
-});
+routes.post('/enrollment', EnrollmentController.create)
+routes.get('/enrollment', EnrollmentController.index)
+routes.delete('/enrollment:id', EnrollmentController.delete)
 
 module.exports = routes;
