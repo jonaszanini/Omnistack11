@@ -2,10 +2,10 @@ const connection = require('../database/connection')
 
 module.exports = {
 
-    async index(req, res) {
+    async index(request, response) {
         const users = await connection('users').select('*');
     
-        return res.json(users);
+        return response.json(users);
     },
 
     async create(request, response) {

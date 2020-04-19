@@ -3,14 +3,23 @@ const connection = require('../database/connection')
 
 module.exports = {
 
-    async index(req, res) {
-        const courses = await connection('courses').select('*');
+    async index(request, response) {
+        const { page = 1 } = request.query;
+
+        const [count] = await connection('courses').count();
+
+        const courses = await connection('courses')
+        .limit(5)
+        .offset((page - 1) * 5)
+        .select('*');
     
-        return res.json(courses);
+        response.header('X-Total-Count', count['count(*)'])
+
+        return response.json(courses);
     },
 
-    async create(req, res)  {
-        const { name, level, duration, usersEnrolled } = req.body;
+    async create(request, response)  {
+        const { name, level, duration, usersEnrolled } = request.body;
         const id = crypto.randomBytes(4).toString('hex');
 
         await connection('courses').insert({
@@ -21,6 +30,6 @@ module.exports = {
             usersEnrolled
         })
         
-        return res.json({id});
+        return response.json({id});
     }
 }
